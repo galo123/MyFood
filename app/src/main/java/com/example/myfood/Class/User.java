@@ -14,6 +14,7 @@ public class User implements Serializable {
     private String lastName;
     private Date birthDay;
     private int groupCode; //user can be member of one group only
+    private boolean enablePics;
 
     public User(String email, String password, String firstName, String lastName, Date birthDay) {
         this.email = email;
@@ -21,6 +22,7 @@ public class User implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDay = birthDay;
+        this.enablePics = true;
     }
 
     public String getEmail() {

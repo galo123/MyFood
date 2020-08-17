@@ -95,6 +95,14 @@ public class ManageFood extends AppCompatActivity implements BottomNavigationVie
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_bottom_container,
                         new Achievements()).commit();
                 break;
+            case R.id.nav_settings:
+
+                bottomNav.setVisibility(View.GONE);
+                toolbar_text.setText("הגדרות");
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_bottom_container,
+                        new Settings()).commit();
+
+                break;
             case R.id.nav_log_out:
                 Intent intent = new Intent(this, Login.class);
                 startActivity(intent);
