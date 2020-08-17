@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Family implements Serializable {
 
-    //family contains group of 10 users maximum
+    //family contains group of 10 users max
     private final int MAX_USERS = 10;
 
     private  String groupName;
