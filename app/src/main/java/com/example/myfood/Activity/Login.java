@@ -33,7 +33,7 @@ public class Login extends AppCompatActivity {
     private Button loginBtn;
     private Context context;
 
-    //authentication - need to be completed
+//auth
     private FirebaseAuth mAuth;
 
     @Override
