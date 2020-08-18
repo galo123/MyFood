@@ -25,7 +25,6 @@ public class Settings extends Fragment {
         switchEnablePics.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    context.
                 }
             }
         });

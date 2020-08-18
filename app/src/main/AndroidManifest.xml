@@ -3,6 +3,9 @@
     package="com.example.myfood">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.CAMERA"></uses-feature>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.RecipeMovie"></activity>
+        <activity android:name=".Activity.Camera"></activity>
+        <activity android:name=".Activity.RecipeMovie" />
         <activity
             android:name=".Activity.Popup.AddFoodList"
             android:theme="@style/AppTheme.popMe" />
@@ -31,5 +35,7 @@
             </intent-filter>
         </activity>
     </application>
+
+
 
 </manifest>

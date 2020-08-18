@@ -1,5 +1,6 @@
 package com.example.myfood.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.myfood.Activity.Camera;
 import com.example.myfood.R;
 
 public class Scan extends Fragment {
@@ -22,8 +24,14 @@ public class Scan extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_scan, container, false);
 
         progressBar=view.findViewById(R.id.scan_progresBar);
+
+        Intent camera_intent = new Intent(getContext(), Camera.class);
+        startActivity(camera_intent);
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
+
+
             @Override
             public void run() {
                 progressBar.setVisibility(View.GONE);
@@ -32,6 +40,8 @@ public class Scan extends Fragment {
 
             }
         }, 3000);
+
+
 
 
         return view;
