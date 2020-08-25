@@ -4,6 +4,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -12,17 +13,27 @@ public class User implements Serializable {
     private String password;
     private String firstName;
     private String lastName;
-    private Date birthDay;
+    private String birthDay;
+
+
     private int groupCode; //user can be member of one group only
     private boolean enablePics;
 
-    public User(String email, String password, String firstName, String lastName, Date birthDay) {
+    //constructor if the user enters group code
+    public User(String email, String firstName, String lastName, String password, String birthDay) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDay = birthDay;
         this.enablePics = true;
+            }
+    //constructor if the user doesn't enter group code?
+
+
+    //default for firebase
+    public User() {
+
     }
 
     public String getEmail() {
@@ -57,12 +68,21 @@ public class User implements Serializable {
         this.lastName = lastName;
     }
 
-    public Date getBirthDay() {
+    public String getBirthDay() {
         return birthDay;
     }
 
-    public void setBirthDay(Date birthDay) {
+    public void setBirthDay(String birthDay) {
         this.birthDay = birthDay;
+    }
+
+
+    public int getGroupCode() {
+        return groupCode;
+    }
+
+    public void setGroupCode(int groupCode) {
+        this.groupCode = groupCode;
     }
 
     void joinNewGroup(String groupName, ArrayList<User> users) {
