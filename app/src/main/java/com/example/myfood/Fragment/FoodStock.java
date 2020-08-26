@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +21,10 @@ import com.example.myfood.Activity.Popup.AddFoodList;
 import com.example.myfood.Activity.Popup.EditFoodList;
 import com.example.myfood.Class.FoodItem;
 import com.example.myfood.Adapter.FoodListAdapter;
+import com.example.myfood.Class.User;
 import com.example.myfood.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -30,12 +36,25 @@ public class FoodStock extends Fragment  {
     private RecyclerView.LayoutManager mLayoutManager;
     private Button addBtn;
 
+   // private TextView foodItemName;
+    //private TextView add_numberPicker;
+    //private  TextView addAmount;
+    DatabaseReference reff;
+    private FoodItem newFoodItem;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_food_stock, container, false);
 
+        reff = FirebaseDatabase.getInstance().getReference("FoodItems");
+
+
         addBtn=view.findViewById(R.id.add_food_item);
+     //   foodItemName = view.findViewById(R.id.food_name);
+      //  add_numberPicker =  view.findViewById(R.id.add_numberPicker);
+       // addAmount = view.findViewById(R.id.amountTV);
+
 
         foodList = new ArrayList<>();
         if(Integer.parseInt(Login.birthDayET.getText().toString())<=20){
@@ -70,7 +89,16 @@ public class FoodStock extends Fragment  {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getContext(), AddFoodList.class);
+
                 startActivity(intent);
+
+                // save new product to firebase
+                //String foodDiscription, int amount,String unit,String url)
+
+
+
+
+
 
             }
         });

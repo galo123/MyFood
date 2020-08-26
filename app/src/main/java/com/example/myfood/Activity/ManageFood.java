@@ -60,7 +60,13 @@ public class ManageFood extends AppCompatActivity implements BottomNavigationVie
         if (savedInstanceState==null){
             navigationView.setCheckedItem(R.id.nav_Food_stock);
         }
+        //for firebase errors
+     /*   if (Integer.parseInt(Login.birthDayET.getText().toString()) == 0) {
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.nav_achievements).setVisible(false);
 
+        }
+*/
         if (Integer.parseInt(Login.birthDayET.getText().toString()) >= 20) {
             Menu nav_Menu = navigationView.getMenu();
             nav_Menu.findItem(R.id.nav_achievements).setVisible(false);

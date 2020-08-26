@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.myfood.Class.User;
 import com.example.myfood.Fragment.FoodStock;
 import com.example.myfood.R;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -26,9 +27,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Login extends AppCompatActivity {
+    private static final int MY_REQUEST_CODE = 10 ; //can be any number
     private EditText emailET;
     private EditText passwordlET;
     private EditText firstNameET;
@@ -54,6 +59,7 @@ public class Login extends AppCompatActivity {
 
 //auth
     private FirebaseAuth mAuth;
+    List<AuthUI.IdpConfig> providers;
 /*
     private String email, password; //why its gray?
 */
@@ -62,15 +68,23 @@ public class Login extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+      //  updateUI(currentUser);
     }
 
     private void updateUI(FirebaseUser currentUser) {
         //needs to be implemented?
+        boolean isSignedIn = (currentUser != null);
+
+        if (isSignedIn) {
+
+            Toast.makeText(context, "נרשמת בהצלחה", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, ManageFood.class);
+            startActivity(intent);
+           finish();
+        }
+
 
     }
-
-
 
 
     @Override
@@ -78,82 +92,14 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
        //auth
+        providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
+        showSignInOptions();
+
         mAuth = FirebaseAuth.getInstance();
-        // firebase connection test
 
-       // loginTable = new LoginTable();
-
-
+        // firebase connection to insert data
         reff = FirebaseDatabase.getInstance().getReference("User");
 
-/*
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-        String email, password;
-        email = emailTV.getText().toString();
-        password = passwordlTV.getText().toString();
-
-        //4. sign up new users - without debuging
-        mAuth.createUserWithEmailAndPassword(emailET.getText().toString(), passwordlET.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            // Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                          //  updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            //    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            //   Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                            //           Toast.LENGTH_SHORT).show();
-                       //     updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });
-
-// 5. sign in existing users - i deleted the bedug errors or comments
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                          //  Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                       //     Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        //    Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                       //             Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });
-
-// 6. access user information
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            // Name, email address, and profile photo Url
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            Uri photoUrl = user.getPhotoUrl(); //delete?
-
-            // Check if user's email is verified
-            boolean emailVerified = user.isEmailVerified();
-
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getIdToken() instead.
-            String uid = user.getUid();
-        }
-*/
         context = this;
         teamET = findViewById(R.id.teamET);
         teamTV = findViewById(R.id.teamTV);
@@ -228,6 +174,11 @@ public class Login extends AppCompatActivity {
                             Toast.makeText(context, "האיימל או הסיסמא שגויים", Toast.LENGTH_LONG).show();
 
                         }
+
+                        //firebase code
+                      //  signIn(emailET.getText().toString(), passwordlET.getText().toString());
+
+
                         break;
                     case "הבא":
                         if (!signUiCheck()) {
@@ -282,9 +233,11 @@ public class Login extends AppCompatActivity {
     }
 
 
+
+
     public boolean loginUiCheck() {
         boolean flag = false;
-
+      //  getCurrentUser();
         if (emailET.getText().toString().equals("")) {
             emailET.setError("הכנס איימל");
             flag = true;
@@ -332,6 +285,90 @@ public class Login extends AppCompatActivity {
 
     }
 
+    private void showSignInOptions() {
+        startActivityForResult(
+                AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), MY_REQUEST_CODE);
 
+    }
+
+
+    private  void createAccount(String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("tag", "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                          //  updateUI(user);
+
+                            Toast.makeText(context, "נרשמת בהצלחה", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(context, ManageFood.class);
+                            startActivity(intent);
+                            finish();
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                         /*   Log.w("tag", "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(Login.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                            */
+
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+private void signIn(String email, String password) {
+    mAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("tag", "signInWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                    //   updateUI(user);
+
+                        Toast.makeText(context, "נרשמת בהצלחה", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, ManageFood.class);
+                        startActivity(intent);
+                        finish();
+
+                    } /*else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("tag", "signInWithEmail:failure", task.getException());
+                        Toast.makeText(Login.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                        updateUI(null);
+                    }
+                    */
+
+                    // ...
+                }
+            });
+    }
+
+    private void getCurrentUser() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+
+            // Check if user's email is verified
+            boolean emailVerified = user.isEmailVerified();
+
+            // The user's ID, unique to the Firebase project. Do NOT use this value to
+            // authenticate with your backend server, if you have one. Use
+            // FirebaseUser.getIdToken() instead.
+            String uid = user.getUid();
+        }
+    }
 
 }

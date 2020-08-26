@@ -22,6 +22,8 @@ import com.example.myfood.Activity.Login;
 import com.example.myfood.Class.FoodItem;
 import com.example.myfood.Fragment.FoodStock;
 import com.example.myfood.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 public class AddFoodList extends Activity implements AdapterView.OnItemSelectedListener {
@@ -33,7 +35,7 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
     private String currentCategory, currentUnit;
     private ImageView foodImage;
     private Context context;
-
+    DatabaseReference reff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,9 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
+
+        reff = FirebaseDatabase.getInstance().getReference("FoodItems");
+
         setContentView(R.layout.activity_add_food_list);
         context = this;
         categorySpinner = findViewById(R.id.category_spinner);
@@ -71,6 +76,15 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
                 FoodStock.foodList.add(foodItem);
                 finish();
                 FoodStock.mAdapter.notifyDataSetChanged();
+
+
+                //firebase data insertion
+               // newFoodItem = new FoodItem(  foodItemName.getText().toString().trim(), Integer.parseInt(addAmount.getText().toString().trim()),  add_numberPicker.getText().toString().trim() );
+               // reff.push().setValue(newFoodItem);
+
+
+                reff.push().setValue(foodItem);
+                Toast.makeText(AddFoodList.this, "data inserted successfully!",Toast.LENGTH_LONG ).show();
 
                 Toast.makeText(context, "המוצר נוסף בהצלחה", Toast.LENGTH_SHORT).show();
 

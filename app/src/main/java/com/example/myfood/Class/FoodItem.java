@@ -11,7 +11,7 @@ public class FoodItem  implements Serializable {
 
 
 
-    public FoodItem(String foodDiscription, int amount,String unit,String url){
+    public FoodItem(String foodDiscription, int amount, String unit, String url){
         this.foodDiscription=foodDiscription;
         this.amount=amount;
         this.unit=unit;
@@ -21,6 +21,10 @@ public class FoodItem  implements Serializable {
         this.foodDiscription=foodDiscription;
         this.amount=amount;
         this.unit=unit;
+    }
+
+    public FoodItem(){
+
     }
 
     public String getFoodDiscription() {
@@ -41,6 +45,19 @@ public class FoodItem  implements Serializable {
         this.amount = amount;
     }
 
+
+    public void setFoodDiscription(String foodDiscription) {
+        this.foodDiscription = foodDiscription;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,3 +71,5 @@ public class FoodItem  implements Serializable {
         return Objects.hash(foodDiscription);
     }
 }
+
+
