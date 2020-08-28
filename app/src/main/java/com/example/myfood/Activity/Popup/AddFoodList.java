@@ -117,7 +117,7 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
         switch (parent.getId()) {
             case R.id.category_spinner:
                 currentCategory = parent.getItemAtPosition(position).toString();
-                if (Integer.parseInt(Login.birthDayET.getText().toString()) <= 20) {
+              {
                     switch (parent.getItemAtPosition(position).toString()) {
                         case "גבינה לבנה":
                             Picasso.get()

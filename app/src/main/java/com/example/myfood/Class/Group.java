@@ -26,6 +26,10 @@ public class Group implements Serializable {
      //   this.familyMembers = familyMembers; // include group creator
     }
 
+    public Group() {
+
+    }
+
 
     public String getGroupName() {
         return groupName;
