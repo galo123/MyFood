@@ -108,6 +108,21 @@
             android:inputType="number"
             android:paddingHorizontal="12dp" />
 
+        <TextView
+            android:id="@+id/newTeamTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:text=" שם קבוצה חדשה"
+            android:textColor="@color/colorAccent" />
+
+        <EditText
+            android:id="@+id/newTeamET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:paddingHorizontal="12dp" />
+
 
         <Button
             android:id="@+id/login"

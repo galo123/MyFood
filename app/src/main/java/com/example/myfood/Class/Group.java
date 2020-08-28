@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class Family implements Serializable {
+public class Group implements Serializable {
 
     //family contains group of 10 users max
     private final int MAX_USERS = 10;
@@ -17,12 +17,13 @@ public class Family implements Serializable {
     private int score;
     private ArrayList<User> familyMembers;
 
-    public Family(String groupName, ArrayList<User> familyMembers) {
+    public Group(String groupName) {
         this.groupName = groupName;
         this.groupCode = this.hashCode();
         this.creationTime =  Calendar.getInstance().getTime();
         this.score = 0;
-        this.familyMembers = familyMembers; // include group creator
+        this.familyMembers = new ArrayList<User>();
+     //   this.familyMembers = familyMembers; // include group creator
     }
 
 
@@ -58,6 +59,10 @@ public class Family implements Serializable {
 
     public void setFamilyMembers(ArrayList<User> familyMembers) {
         this.familyMembers = familyMembers;
+    }
+
+    public void addFamilyMemberToGroup(User newMember) {
+        this.familyMembers.add(newMember);
     }
 
 }
