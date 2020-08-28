@@ -97,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
-            android:text=" מספר קבוצה קיים"
+            android:text=" שם קבוצה קיימת"
             android:textColor="@color/colorAccent" />
 
         <EditText
@@ -105,7 +105,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
-            android:inputType="number"
             android:paddingHorizontal="12dp" />
 
         <TextView
