@@ -35,10 +35,6 @@ public class FoodStock extends Fragment  {
     public static FoodListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private Button addBtn;
-
-   // private TextView foodItemName;
-    //private TextView add_numberPicker;
-    //private  TextView addAmount;
     DatabaseReference reff;
     private FoodItem newFoodItem;
 
@@ -57,16 +53,12 @@ public class FoodStock extends Fragment  {
 
 
         foodList = new ArrayList<>();
-        if(Integer.parseInt(Login.birthDayET.getText().toString())<=20){
+      //  if(Integer.parseInt(Login.birthDayET.getText().toString())<=20){
             foodList.add(new FoodItem("חמאה", 200, "גרם","https://dairyfarmersofcanada.ca/sites/default/files/product_butter_thumb.jpg"));
             foodList.add(new FoodItem("קמח", 2, "קילוגרם","https://www.apk-inform.com/uploads/Redakciya/2019/%D0%98%D1%8E%D0%BD%D1%8C/%D0%BC%D1%83%D0%BA%D0%B0.jpg"));
             foodList.add(new FoodItem("ביצים", 12, "יחידות","https://chriskresser.com/wp-content/uploads/iStock-172696992.jpg"));
 
-        }else {
-            foodList.add(new FoodItem("חמאה", 200, "גרם"));
-            foodList.add(new FoodItem("קמח", 2, "קילוגרם"));
-            foodList.add(new FoodItem("ביצים", 12, "יחידות"));
-        }
+
         mRecyclerView = view.findViewById(R.id.food_stock_recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -92,14 +84,6 @@ public class FoodStock extends Fragment  {
 
                 startActivity(intent);
 
-                // save new product to firebase
-                //String foodDiscription, int amount,String unit,String url)
-
-
-
-
-
-
             }
         });
 
@@ -108,7 +92,6 @@ public class FoodStock extends Fragment  {
 
 
     }
-
 
 
 }

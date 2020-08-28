@@ -67,11 +67,11 @@ public class ManageFood extends AppCompatActivity implements BottomNavigationVie
 
         }
 */
-        if (Integer.parseInt(Login.birthDayET.getText().toString()) >= 20) {
+      //  if (Integer.parseInt(Login.birthDayET.getText().toString()) >= 20) {
             Menu nav_Menu = navigationView.getMenu();
             nav_Menu.findItem(R.id.nav_achievements).setVisible(false);
 
-        }
+        //}
 
         }
 
