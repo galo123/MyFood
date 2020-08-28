@@ -3,11 +3,11 @@ package com.example.myfood.Class;
 import android.graphics.Bitmap;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
-import java.security.acl.Group;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class User implements Serializable {
     private String email;
@@ -19,6 +19,7 @@ public class User implements Serializable {
 
     private int groupCode; //user can be member of one group only
     private boolean enablePics;
+
 
     //constructor if the user enters group code
     public User(String email, String firstName, String lastName, String password, String birthDay) {
@@ -86,8 +87,9 @@ public class User implements Serializable {
         this.groupCode = groupCode;
     }
 
+    //need to be changed
     void joinNewGroup(String groupName, ArrayList<User> users) {
-        Family newGroup = new Family(groupName,users);
+        Group newGroup = new Group(groupName);
         this.groupCode = newGroup.getGroupCode();
         //catch errors
     }

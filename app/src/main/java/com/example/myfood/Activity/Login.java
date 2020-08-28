@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myfood.Class.Group;
 import com.example.myfood.Class.User;
 import com.example.myfood.Fragment.FoodStock;
 import com.example.myfood.R;
@@ -24,16 +25,20 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 public class Login extends AppCompatActivity {
-    private static final int MY_REQUEST_CODE = 10 ; //can be any number
+  //  private static final int MY_REQUEST_CODE = 10 ; //can be any number
     private EditText emailET;
     private EditText passwordlET;
     private EditText firstNameET;
@@ -46,6 +51,8 @@ public class Login extends AppCompatActivity {
     private TextView passwordlTV;
     private TextView teamTV;
     private EditText teamET;
+    private TextView newTeamTV;
+    private EditText newTeamET;
     private TextView creatAccountTV;
     private Button loginBtn;
     private Context context;
@@ -53,15 +60,20 @@ public class Login extends AppCompatActivity {
     public User user;
 
     //EditText txtName, txtAge, txtMail;
-    // EditText txtPassword, txtFamilyname, txtTeamId;
+    // EditText txtP
+    // assword, txtFamilyname, txtTeamId;
     Button btnSave;
     DatabaseReference reff;
+    DatabaseReference reff_user;
+    DatabaseReference reff_group;
+    Group newGroup;
+    private String userID;
 
    // LoginTable loginTable;
 
 //auth
-    private FirebaseAuth mAuth;
-    List<AuthUI.IdpConfig> providers;
+ //  private FirebaseAuth mAuth;
+  //  List<AuthUI.IdpConfig> providers;
 /*
     private String email, password; //why its gray?
 */
@@ -69,8 +81,8 @@ public class Login extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-      //  updateUI(currentUser);
+      //  FirebaseUser currentUser = mAuth.getCurrentUser();
+       // updateUI(currentUser);
     }
 
     private void updateUI(FirebaseUser currentUser) {
@@ -96,18 +108,47 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       //auth
-        providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
-        showSignInOptions();
 
-        mAuth = FirebaseAuth.getInstance();
+
+       //auth
+      //  mAuth = FirebaseAuth.getInstance();
+       // FirebaseUser AuthUser = mAuth.getCurrentUser();
+       // userID = AuthUser.getUid();
+
+       // providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
+       // showSignInOptions();
+
 
         // firebase connection to insert data
-        reff = FirebaseDatabase.getInstance().getReference("User");
+        reff_user = FirebaseDatabase.getInstance().getReference("User");
+        reff_group = FirebaseDatabase.getInstance().getReference("Groups");
+
+
+            // Read from the database
+        reff_user.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    //String value = dataSnapshot.getValue(String.class);
+                    User usern = dataSnapshot.getValue(User.class);
+                   // Log.d("tag", "Value is: " + firstName);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w("tag", "Failed to read value.", error.toException());
+                }
+            });
+
 
         context = this;
         teamET = findViewById(R.id.teamET);
         teamTV = findViewById(R.id.teamTV);
+       //continue
+        newTeamET = findViewById(R.id.newTeamET);
+        newTeamTV = findViewById(R.id.newTeamTV);
         emailTV = findViewById(R.id.emailTV);
         emailET = findViewById(R.id.email);
         passwordlTV = findViewById(R.id.passwordTV);
@@ -132,6 +173,8 @@ public class Login extends AppCompatActivity {
 
         teamTV.setVisibility(View.GONE);
         teamET.setVisibility(View.GONE);
+        newTeamTV.setVisibility(View.GONE);
+        newTeamET.setVisibility(View.GONE);
 
 
         creatAccountTV.setOnClickListener(new View.OnClickListener() {
@@ -177,7 +220,7 @@ public class Login extends AppCompatActivity {
                     case "התחבר":
                         if (!loginUiCheck()) {
                             Toast.makeText(context, "האיימל או הסיסמא שגויים", Toast.LENGTH_LONG).show();
-
+                            //זה המסך הראשי שצריך לשים בו את הAUTH
                         }
 
                         //firebase code
@@ -201,14 +244,19 @@ public class Login extends AppCompatActivity {
 
                             teamET.setVisibility(View.VISIBLE);
                             teamTV.setVisibility(View.VISIBLE);
+                            newTeamET.setVisibility(View.VISIBLE);
+                            newTeamTV.setVisibility(View.VISIBLE);
 
                             //firebase data insertion
-                            user = new User(emailET.getText().toString().trim(), firstNameET.getText().toString().trim(), lastNameET.getText().toString().trim(), passwordlET.getText().toString().trim(),
-                                    birthDayET.getText().toString().trim()
-                            );
+                            user = new User();
+                            user.setEmail(emailET.getText().toString().trim());
+                            user.setBirthDay(birthDayET.getText().toString().trim());
+                            user.setFirstName(firstNameET.getText().toString().trim());
+                            user.setLastName( lastNameET.getText().toString().trim());
+                            user.setPassword(passwordlET.getText().toString().trim());
+                            //group number/team will be completed on defferent fragment
 
-
-                            reff.push().setValue(user);
+                        //    reff.push().setValue(user);
 
                             /*  int age=Integer.parseInt(birthDayET.getText().toString().trim());
                             User.setAge(age);
@@ -216,13 +264,14 @@ public class Login extends AppCompatActivity {
                             loginTable.setMail(emailET.getText().toString().trim());
 
                            */
-                            Toast.makeText(Login.this, "data inserted successfully!",Toast.LENGTH_LONG ).show();
+                       //     Toast.makeText(Login.this, "data inserted successfully!",Toast.LENGTH_LONG ).show();
 
                             loginBtn.setText("הירשם");
                         }
                         break;
                     case "הירשם":
                         if(!groupUiCheck()){
+                            //אם המשתמש מילא קבוצה
                             Toast.makeText(context, "נרשמת בהצלחה", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(context, ManageFood.class);
                             Bundle bundle = new Bundle();
@@ -284,22 +333,67 @@ public class Login extends AppCompatActivity {
     public boolean groupUiCheck() {
         boolean flag = false;
 
-        if (teamET.getText().toString().equals("")) {
-            teamET.setError("הכנס קוד קבוצה");
+        //both fields are  null
+        if (teamET.getText().toString().equals("") && newTeamET.getText().toString().equals("")) {
+            teamET.setError("הכנס קוד קבוצה קיים או שם קבוצה חדש");
+            flag = true;
+        }
+        //both fields are not null
+         else if ((!teamET.getText().toString().equals("")) && !(newTeamET.getText().toString().equals(""))) {
+            Toast.makeText(context, "אנא הכנס נתונים רק באחד מהשדות - קבוצה חדשה או קיימת", Toast.LENGTH_SHORT).show();
             flag = true;
         }
 
+        //old group is valid
+        else if (!teamET.getText().toString().equals("")) {
+           //update user group code with the ET group code
+            user.setGroupCode(Integer.parseInt(teamET.getText().toString().trim()));
+            flag = false;
+             reff_user.push().setValue(user);
+
+            //get existing group from db by code and add user
+          // Group ExistingGroup;
+                //   DataSnapshot ds = null;
+           // user.setGroupCode(ds.getValue(Group.class).getGroupCode());
+           // reff_user.getDatabagetva
+        }
+
+        else if (!newTeamET.getText().toString().equals("")) {
+            //creating new group with the entered name
+            newGroup = new Group(newTeamET.getText().toString().trim());
+
+            //update user group code with the new group code and add it to groupMembers
+            user.setGroupCode(newGroup.getGroupCode());
+            reff_user.push().setValue(user);
+            Toast.makeText(Login.this, "users data inserted successfully!",Toast.LENGTH_LONG ).show();
+
+            newGroup.addFamilyMemberToGroup(user);
+              reff_group.push().setValue(newGroup);
+
+        }
+
+        //save to firebase
         return flag;
 
     }
 
+    public void showData(DataSnapshot ds) {
+         //user.getU;
+       // user.setFirstName(ds.child().);
+    }
+
+
+
+    /*
     private void showSignInOptions() {
         startActivityForResult(
                 AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), MY_REQUEST_CODE);
 
     }
 
+*/
 
+/*
     private  void createAccount(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -321,11 +415,10 @@ public class Login extends AppCompatActivity {
 
                         } else {
                             // If sign in fails, display a message to the user.
-                         /*   Log.w("tag", "createUserWithEmail:failure", task.getException());
+                           Log.w("tag", "createUserWithEmail:failure", task.getException());
                             Toast.makeText(Login.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
-                            */
 
                         }
 
@@ -333,6 +426,10 @@ public class Login extends AppCompatActivity {
                     }
                 });
     }
+*/
+
+
+/*
 
 private void signIn(String email, String password) {
     mAuth.signInWithEmailAndPassword(email, password)
@@ -353,14 +450,14 @@ private void signIn(String email, String password) {
                         startActivity(intent);
                         finish();
 
-                    } /*else {
+                    } else {
                         // If sign in fails, display a message to the user.
                         Log.w("tag", "signInWithEmail:failure", task.getException());
                         Toast.makeText(Login.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                         updateUI(null);
                     }
-                    */
+
 
                     // ...
                 }
@@ -384,5 +481,6 @@ private void signIn(String email, String password) {
             String uid = user.getUid();
         }
     }
+
 
 }
