@@ -1,5 +1,6 @@
 package com.example.myfood.Class;
 
+import android.graphics.Bitmap;
 import android.widget.EditText;
 import android.widget.TextView;
 

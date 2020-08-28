@@ -29,6 +29,8 @@
     לציפוי:
     6. סוכר רבע כוס
     7. קינמון כפית</string>
+    <string name="save_pic">שמור</string>
+    <string name="take_pic">צלם</string>
     <string-array name="categories">
 
         <item>גבינה לבנה</item>

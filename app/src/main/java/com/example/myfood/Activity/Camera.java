@@ -13,22 +13,75 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.myfood.Class.Picture;
+import com.example.myfood.Class.User;
 import com.example.myfood.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class Camera extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private ImageView imageView;
+    public boolean isPicExists = false;
+    private Bitmap photo;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
+    private DatabaseReference db;
+    private FirebaseAuth mAuth;
+    public User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera2);
+        this.db = FirebaseDatabase.getInstance().getReference("Picture");
+
+        Intent intent = getIntent();
+        if(intent != null){
+            this.user = (User) intent.getExtras().getSerializable(Login.ACTIVITY_RESULT_KEY);
+        }
+
+
+        Button savePic = (Button) this.findViewById(R.id.button_save);
+        savePic.setOnClickListener(new View.OnClickListener()
+        {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v)
+            {
+
+               if (isPicExists){
+                   Date dt = Calendar.getInstance().getTime();
+                   SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                   String formattedDate = df.format(dt);
+
+                   ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+                   photo.compress(Bitmap.CompressFormat.PNG, 100, byteArray);
+                   String imageEncoded = Base64.encodeToString(byteArray.toByteArray(), Base64.DEFAULT);
+                   Picture picture = new Picture(imageEncoded, formattedDate, user);
+                   db.push().setValue(picture);
+                   Toast.makeText(getBaseContext(), "התמונה נשמרה בהצלחה", Toast.LENGTH_LONG).show();
+               }
+               else{
+                   Toast.makeText(getBaseContext(), "אנא צלם תמונה", Toast.LENGTH_LONG).show();
+               }
+               finish();
+            }
+        });
 
         this.imageView = (ImageView)this.findViewById(R.id.imageView1);
         Button photoButton = (Button) this.findViewById(R.id.button1);
@@ -38,7 +91,6 @@ public class Camera extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                // startScan();
                 if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
                 {
                     requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
@@ -50,33 +102,6 @@ public class Camera extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void startScan() {
-        //save chosen difficulty
-        //start the game
-        new Thread() {
-            @Override
-            public void run() {
-
-                // doLongOperation();
-
-
-                try {
-
-                    // code runs in a thread
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent camera_intent = new Intent(getBaseContext(), Camera.class);
-                            startActivity(camera_intent);
-                        }
-                    });
-                } catch (final Exception ex) {
-                    Log.i("---","Exception in thread");
-                }
-            }
-        }.start();
     }
 
     @Override
@@ -102,8 +127,9 @@ public class Camera extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            this.photo = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(photo);
+            this.isPicExists = true;
         }
     }
 }

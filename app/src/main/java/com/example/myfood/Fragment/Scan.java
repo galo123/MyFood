@@ -14,9 +14,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.myfood.Activity.Camera;
+import com.example.myfood.Activity.Login;
+import com.example.myfood.Class.User;
 import com.example.myfood.R;
 
 public class Scan extends Fragment {
+    public User user;
     private ProgressBar progressBar;
     @Nullable
     @Override
@@ -25,7 +28,12 @@ public class Scan extends Fragment {
 
         progressBar=view.findViewById(R.id.scan_progresBar);
 
+        this.user = (User) getArguments().get(Login.ACTIVITY_RESULT_KEY);
+
         Intent camera_intent = new Intent(getContext(), Camera.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Login.ACTIVITY_RESULT_KEY, user);
+        camera_intent.putExtras(bundle);
         startActivity(camera_intent);
 
         Handler handler = new Handler();

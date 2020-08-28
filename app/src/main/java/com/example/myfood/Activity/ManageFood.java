@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.myfood.Class.User;
 import com.example.myfood.Fragment.Achievements;
 import com.example.myfood.Fragment.FoodStock;
 import com.example.myfood.Fragment.Scan;
@@ -30,6 +31,7 @@ import com.google.android.material.navigation.NavigationView;
 
 public class ManageFood extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
+    private User user;
 
 
     @Override
@@ -39,6 +41,11 @@ public class ManageFood extends AppCompatActivity implements BottomNavigationVie
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
         setContentView(R.layout.activity_manage_food);
+
+        Intent intent = getIntent();
+        if(intent != null){
+            this.user = (User) intent.getExtras().getSerializable(Login.ACTIVITY_RESULT_KEY);
+        }
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
@@ -149,6 +156,9 @@ public class ManageFood extends AppCompatActivity implements BottomNavigationVie
                         case R.id.nav_Scan:
                             toolbar_text.setText("סריקת קבלה");
                             selectedFragment = new Scan();
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(Login.ACTIVITY_RESULT_KEY, user);
+                            selectedFragment.setArguments(bundle);
                             break;
                         case R.id.nav_Food_stock:
                             toolbar_text.setText("מלאי המזון");

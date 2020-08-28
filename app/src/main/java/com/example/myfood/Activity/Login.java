@@ -49,12 +49,14 @@ public class Login extends AppCompatActivity {
     private TextView creatAccountTV;
     private Button loginBtn;
     private Context context;
+    public static final String ACTIVITY_RESULT_KEY = "Activity_result_key";
+    public User user;
 
     //EditText txtName, txtAge, txtMail;
     // EditText txtPassword, txtFamilyname, txtTeamId;
     Button btnSave;
     DatabaseReference reff;
-    User user;
+
    // LoginTable loginTable;
 
 //auth
@@ -79,6 +81,9 @@ public class Login extends AppCompatActivity {
 
             Toast.makeText(context, "נרשמת בהצלחה", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, ManageFood.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(Login.ACTIVITY_RESULT_KEY, user);
+            intent.putExtras(bundle);
             startActivity(intent);
            finish();
         }
@@ -220,6 +225,9 @@ public class Login extends AppCompatActivity {
                         if(!groupUiCheck()){
                             Toast.makeText(context, "נרשמת בהצלחה", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(context, ManageFood.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(Login.ACTIVITY_RESULT_KEY, user);
+                            intent.putExtras(bundle);
                             startActivity(intent);
                             finish();
                         }
@@ -300,11 +308,14 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("tag", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser fireUser = mAuth.getCurrentUser();
                           //  updateUI(user);
 
                             Toast.makeText(context, "נרשמת בהצלחה", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(context, ManageFood.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(Login.ACTIVITY_RESULT_KEY, user);
+                            intent.putExtras(bundle);
                             startActivity(intent);
                             finish();
 
@@ -331,11 +342,14 @@ private void signIn(String email, String password) {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("tag", "signInWithEmail:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
+                        FirebaseUser fireUser = mAuth.getCurrentUser();
                     //   updateUI(user);
 
                         Toast.makeText(context, "נרשמת בהצלחה", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(context, ManageFood.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(Login.ACTIVITY_RESULT_KEY, user);
+                        intent.putExtras(bundle);
                         startActivity(intent);
                         finish();
 
