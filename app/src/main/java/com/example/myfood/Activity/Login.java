@@ -39,7 +39,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Login extends AppCompatActivity {
-    //  private static final int MY_REQUEST_CODE = 10 ; //can be any number
     private EditText emailET;
     private EditText passwordlET;
     private EditText firstNameET;
@@ -58,39 +57,16 @@ public class Login extends AppCompatActivity {
     private Button loginBtn;
     private Context context;
 
-    Button btnSave;
     DatabaseReference reff_user;
     DatabaseReference reff_group;
     User user;
     Group newGroup;
-    private String userID;
-
-
-    //auth
     private FirebaseAuth mAuth;
-
-
-    private void updateUI(FirebaseUser currentUser) {
-        //needs to be implemented?
-        boolean isSignedIn = (currentUser != null);
-
-        if (isSignedIn) {
-
-            Toast.makeText(context, "נרשמת בהצלחה", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(context, ManageFood.class);
-            startActivity(intent);
-            finish();
-        }
-
-
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         //auth
         mAuth = FirebaseAuth.getInstance();
@@ -184,23 +160,22 @@ public class Login extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d("TAG_success", "signInWithEmail:success");
-                                        FirebaseUser user = mAuth.getCurrentUser();
-                                        updateUI(user);
+                                        Toast.makeText(context, "ברוך הבא!", Toast.LENGTH_LONG).show();
+                                        Intent intent = new Intent(context, ManageFood.class);
+                                        startActivity(intent);
+                                        finish();
+
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w("TAG_fail", "signInWithEmail:failure", task.getException());
                                         Toast.makeText(context, "Authentication failed.",
                                                 Toast.LENGTH_SHORT).show();
-                                        updateUI(null);
                                     }
 
                                 }
                             });
 
-                            Toast.makeText(context, "ברוך הבא!", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(context, ManageFood.class);
-                            startActivity(intent);
-                            finish();
+
                         }
                         break;
                     case "הבא":
@@ -313,8 +288,9 @@ public class Login extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("tag", "createUserWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                updateUI(user);
+                                Intent intent = new Intent(context, ManageFood.class);
+                                startActivity(intent);
+                                finish();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("TAG", "createUserWithEmail:failure", task.getException());
@@ -346,9 +322,10 @@ public class Login extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("tag", "createUserWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                updateUI(user);
-                            } else {
+                                Intent intent = new Intent(context, ManageFood.class);
+                                startActivity(intent);
+                                finish();                            }
+                            else {
                                 // If sign in fails, display a message to the user.
                                 Log.w("TAG", "createUserWithEmail:failure", task.getException());
                                 Toast.makeText(context, "Authentication failed.",
@@ -361,27 +338,4 @@ public class Login extends AppCompatActivity {
         return flag;
     }
 
-
-    private void createAccount(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("tag", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("tag", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(Login.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-
-                    }
-                });
-
-    }
 }
