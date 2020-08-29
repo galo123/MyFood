@@ -46,13 +46,14 @@ public class Camera extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera2);
-        this.db = FirebaseDatabase.getInstance().getReference("Picture");
 
         Intent intent = getIntent();
         if(intent != null){
             this.user = (User) intent.getExtras().getSerializable(Login.LOGIN_USER_KEY);
             this.group = (Group) intent.getExtras().getSerializable(Login.LOGIN_GROUP_KEY);
         }
+        this.db = FirebaseDatabase.getInstance().getReference("Groups").child(this.group.getGroupName());
+
 
 
         Button savePic = (Button) this.findViewById(R.id.button_save);
@@ -72,6 +73,9 @@ public class Camera extends AppCompatActivity {
                    photo.compress(Bitmap.CompressFormat.PNG, 100, byteArray);
                    String imageEncoded = Base64.encodeToString(byteArray.toByteArray(), Base64.DEFAULT);
                    Picture picture = new Picture(imageEncoded, formattedDate, user, group);
+
+                   group.addPicture(picture);
+                   db.setValue(group);
                    db.push().setValue(picture);
                    Toast.makeText(getBaseContext(), "התמונה נשמרה בהצלחה", Toast.LENGTH_LONG).show();
                }

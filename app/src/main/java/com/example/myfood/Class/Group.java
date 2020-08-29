@@ -16,6 +16,7 @@ public class Group implements Serializable {
     private Date creationTime;
     private int score;
     private ArrayList<User> familyMembers;
+    private ArrayList<Picture> pictures;
 
     public Group(String groupName) {
         this.groupName = groupName;
@@ -23,6 +24,7 @@ public class Group implements Serializable {
         this.creationTime =  Calendar.getInstance().getTime();
         this.score = 0;
         this.familyMembers = new ArrayList<User>();
+        this.pictures = new ArrayList<Picture>();
      //   this.familyMembers = familyMembers; // include group creator
     }
 
@@ -68,5 +70,11 @@ public class Group implements Serializable {
     public void addFamilyMemberToGroup(User newMember) {
         this.familyMembers.add(newMember);
     }
+
+    public ArrayList<Picture> getPictures(){return pictures;}
+
+    public void setPictures(ArrayList<Picture> pictures){this.pictures = pictures;}
+
+    public void addPicture(Picture picture){this.pictures.add(picture);}
 
 }
