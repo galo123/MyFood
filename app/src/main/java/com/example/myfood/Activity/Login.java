@@ -333,11 +333,11 @@ public class Login extends AppCompatActivity {
                             retrievedGroup.addFamilyMemberToGroup(user);
 
                             //push retrievedGroup back to DB
-                           reff_group = FirebaseDatabase.getInstance().getReference("Groups");//.child(teamET.getText().toString().trim());//.child("familyMembers");
-                           reff_group.push().setValue(retrievedGroup);
+                           reff_group = FirebaseDatabase.getInstance().getReference("Groups").child(teamET.getText().toString());//.child(teamET.getText().toString().trim());//.child("familyMembers");
+                           reff_group.setValue(retrievedGroup);
 
                               flagQuery = true;
-                            Toast.makeText(context, "נרשמת בהצלחה", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(context, "נרשמת בהצלחה", Toast.LENGTH_SHORT).show();
 
                             mAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).
                                     addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -362,14 +362,12 @@ public class Login extends AppCompatActivity {
                                             }
                                         }
                                     });
-break;
 
 
 
+                          //  break;
                         }
-                    break;
                     }
-
 
 
 
@@ -385,7 +383,6 @@ break;
 
             });
 
-           // Toast.makeText(context, "הקבוצה לא קיימת,/n אנא הכנס שם קבוצה תקין או צור קבוצה חדשה", Toast.LENGTH_SHORT).show();
             flag = true;
 
         }
