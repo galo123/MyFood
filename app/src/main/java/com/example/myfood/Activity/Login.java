@@ -50,11 +50,9 @@ public class Login extends AppCompatActivity {
     public static final String LOGIN_USER_KEY = "login_user_key";
     public static final String LOGIN_GROUP_KEY = "login_group_key";
     public User user;
-    public Group retrievedGroup;
-
     DatabaseReference reff_user;
     DatabaseReference reff_group;
-    Group newGroup;
+    public Group group;
     private FirebaseAuth mAuth;
 
 
@@ -68,7 +66,7 @@ public class Login extends AppCompatActivity {
             Intent intent = new Intent(context, ManageFood.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable(Login.LOGIN_USER_KEY, user);
-            bundle.putSerializable(Login.LOGIN_GROUP_KEY,newGroup);
+            bundle.putSerializable(Login.LOGIN_GROUP_KEY, group);
             intent.putExtras(bundle);
             startActivity(intent);
             finish();
@@ -185,7 +183,7 @@ public class Login extends AppCompatActivity {
                                         Intent intent = new Intent(context, ManageFood.class);
                                         Bundle bundle = new Bundle();
                                         bundle.putSerializable(Login.LOGIN_USER_KEY, user);
-                                        bundle.putSerializable(Login.LOGIN_GROUP_KEY,newGroup);
+                                        bundle.putSerializable(Login.LOGIN_GROUP_KEY, group);
                                         intent.putExtras(bundle);
                                         startActivity(intent);
                                         finish();
@@ -248,7 +246,7 @@ public class Login extends AppCompatActivity {
                                                 Intent intent = new Intent(context, ManageFood.class);
                                                 Bundle bundle = new Bundle();
                                                 bundle.putSerializable(Login.LOGIN_USER_KEY, user);
-                                                bundle.putSerializable(Login.LOGIN_GROUP_KEY,newGroup);
+                                                bundle.putSerializable(Login.LOGIN_GROUP_KEY, group);
                                                 intent.putExtras(bundle);
                                                 startActivity(intent);
                                                 finish();
@@ -331,12 +329,14 @@ public class Login extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     boolean flagQuery=false;
                     for (DataSnapshot keyNode : dataSnapshot.getChildren()) {
-                        retrievedGroup = keyNode.child("").getValue(Group.class); //cast to group
+                        Group retrievedGroup = keyNode.child("").getValue(Group.class); //cast to group
 
                         if (retrievedGroup != null && teamET.getText().toString().trim().
                                 equals(retrievedGroup.getGroupName())) {
                             user.setGroupCode(retrievedGroup.getGroupCode()); //update user's group code
                             retrievedGroup.addFamilyMemberToGroup(user);
+                            group = retrievedGroup;
+
 
                             //push retrievedGroup back to DB
                            reff_group = FirebaseDatabase.getInstance().getReference("Groups").child(teamET.getText().toString());//.child(teamET.getText().toString().trim());//.child("familyMembers");
@@ -355,7 +355,7 @@ public class Login extends AppCompatActivity {
                                                 Intent intent = new Intent(context, ManageFood.class);
                                                 Bundle bundle = new Bundle();
                                                 bundle.putSerializable(Login.LOGIN_USER_KEY, user);
-                                                bundle.putSerializable(Login.LOGIN_GROUP_KEY,retrievedGroup);
+                                                bundle.putSerializable(Login.LOGIN_GROUP_KEY,group);
                                                 intent.putExtras(bundle);
                                                 startActivity(intent);
                                                 finish();
@@ -395,17 +395,17 @@ public class Login extends AppCompatActivity {
 
         else if (!newTeamET.getText().toString().equals("")) {
             //creating new group with the entered name
-            newGroup = new Group(newTeamET.getText().toString().trim());
+            group = new Group(newTeamET.getText().toString().trim());
 
             //update user group code with the new group code and add it to groupMembers
-           user.setGroupCode(newGroup.getGroupCode());
+           user.setGroupCode(group.getGroupCode());
            // reff_user = FirebaseDatabase.getInstance().getReference("Groups").child(newTeamET.getText().toString()).child("Users");
            // reff_user.push().setValue(user);
            // Toast.makeText(Login.this, "users data inserted successfully!", Toast.LENGTH_LONG).show();
 
-            newGroup.addFamilyMemberToGroup(user);
+            group.addFamilyMemberToGroup(user);
             reff_group = FirebaseDatabase.getInstance().getReference("Groups").child(newTeamET.getText().toString());
-            reff_group.setValue(newGroup);
+            reff_group.setValue(group);
             mAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword()).
                     addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -416,7 +416,7 @@ public class Login extends AppCompatActivity {
                                 Intent intent = new Intent(context, ManageFood.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable(Login.LOGIN_USER_KEY, user);
-                                bundle.putSerializable(Login.LOGIN_GROUP_KEY,newGroup);
+                                bundle.putSerializable(Login.LOGIN_GROUP_KEY,group);
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 finish();                            }
