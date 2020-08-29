@@ -173,6 +173,12 @@ public class Login extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
+                                        user = new User();
+                                        user.setEmail(emailET.getText().toString().trim());
+                                        user.setBirthDay(birthDayET.getText().toString().trim());
+                                        user.setFirstName(firstNameET.getText().toString().trim());
+                                        user.setLastName(lastNameET.getText().toString().trim());
+                                        user.setPassword(passwordlET.getText().toString().trim());
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d("TAG_success", "signInWithEmail:success");
                                         Toast.makeText(context, "ברוך הבא!", Toast.LENGTH_LONG).show();
