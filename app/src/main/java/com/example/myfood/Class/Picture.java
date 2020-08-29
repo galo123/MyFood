@@ -8,14 +8,16 @@ public class Picture {
     private String imageEncoded;
     private String date;
     private  User user;
+    private  Group group;
 
 
     public Picture(){}
 
-    public Picture(String imageEncoded, String date, User user){
+    public Picture(String imageEncoded, String date, User user, Group group){
         this.imageEncoded = imageEncoded;
         this.date = date;
         this.user = user;
+        this.group = group;
     }
 
     public String getDate(){return date;}
@@ -29,4 +31,8 @@ public class Picture {
     public String getImageEncoded(){ return imageEncoded;}
 
     public void setImageEncoded(String imageEncoded){this.imageEncoded = imageEncoded;}
+
+    public Group getGroup(){return group;}
+
+    public void setGroup(Group group){this.group = group;}
 }

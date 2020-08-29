@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.myfood.Class.Group;
 import com.example.myfood.Class.User;
 import com.example.myfood.Fragment.Achievements;
 import com.example.myfood.Fragment.FoodStock;
@@ -32,6 +32,7 @@ import com.google.android.material.navigation.NavigationView;
 public class ManageFood extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private User user;
+    private Group group;
 
 
     @Override
@@ -44,7 +45,8 @@ public class ManageFood extends AppCompatActivity implements BottomNavigationVie
 
         Intent intent = getIntent();
         if(intent != null){
-            this.user = (User) intent.getExtras().getSerializable(Login.ACTIVITY_RESULT_KEY);
+            this.user = (User) intent.getExtras().getSerializable(Login.LOGIN_USER_KEY);
+            this.group = (Group)intent.getExtras().getSerializable(Login.LOGIN_GROUP_KEY);
         }
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
@@ -149,7 +151,8 @@ public class ManageFood extends AppCompatActivity implements BottomNavigationVie
                             toolbar_text.setText("סריקת קבלה");
                             selectedFragment = new Scan();
                             Bundle bundle = new Bundle();
-                            bundle.putSerializable(Login.ACTIVITY_RESULT_KEY, user);
+                            bundle.putSerializable(Login.LOGIN_USER_KEY, user);
+                            bundle.putSerializable(Login.LOGIN_GROUP_KEY, group);
                             selectedFragment.setArguments(bundle);
                             break;
                         case R.id.nav_Food_stock:

@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,9 +17,7 @@ import android.widget.Toast;
 
 import com.example.myfood.Class.Group;
 import com.example.myfood.Class.User;
-import com.example.myfood.Fragment.FoodStock;
 import com.example.myfood.R;
-import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,14 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 public class Login extends AppCompatActivity {
     private EditText emailET;
@@ -57,8 +47,10 @@ public class Login extends AppCompatActivity {
     private TextView creatAccountTV;
     private Button loginBtn;
     private Context context;
-    public static final String ACTIVITY_RESULT_KEY = "Activity_result_key";
+    public static final String LOGIN_USER_KEY = "login_user_key";
+    public static final String LOGIN_GROUP_KEY = "login_group_key";
     public User user;
+    public Group retrievedGroup;
 
     DatabaseReference reff_user;
     DatabaseReference reff_group;
@@ -75,7 +67,8 @@ public class Login extends AppCompatActivity {
             Toast.makeText(context, "נרשמת בהצלחה", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, ManageFood.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable(Login.ACTIVITY_RESULT_KEY, user);
+            bundle.putSerializable(Login.LOGIN_USER_KEY, user);
+            bundle.putSerializable(Login.LOGIN_GROUP_KEY,newGroup);
             intent.putExtras(bundle);
             startActivity(intent);
             finish();
@@ -184,6 +177,10 @@ public class Login extends AppCompatActivity {
                                         Log.d("TAG_success", "signInWithEmail:success");
                                         Toast.makeText(context, "ברוך הבא!", Toast.LENGTH_LONG).show();
                                         Intent intent = new Intent(context, ManageFood.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable(Login.LOGIN_USER_KEY, user);
+                                        bundle.putSerializable(Login.LOGIN_GROUP_KEY,newGroup);
+                                        intent.putExtras(bundle);
                                         startActivity(intent);
                                         finish();
 
@@ -244,10 +241,12 @@ public class Login extends AppCompatActivity {
                                                 Log.d("tag", "createUserWithEmail:success");
                                                 Intent intent = new Intent(context, ManageFood.class);
                                                 Bundle bundle = new Bundle();
-                            bundle.putSerializable(Login.ACTIVITY_RESULT_KEY, user);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                            finish();} else {
+                                                bundle.putSerializable(Login.LOGIN_USER_KEY, user);
+                                                bundle.putSerializable(Login.LOGIN_GROUP_KEY,newGroup);
+                                                intent.putExtras(bundle);
+                                                startActivity(intent);
+                                                finish();
+                                            } else {
                                                 // If sign in fails, display a message to the user.
                                                 Log.w("TAG", "createUserWithEmail:failure", task.getException());
                                                 Toast.makeText(context, "Authentication failed.",
@@ -326,7 +325,7 @@ public class Login extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     boolean flagQuery=false;
                     for (DataSnapshot keyNode : dataSnapshot.getChildren()) {
-                        Group retrievedGroup = keyNode.child("").getValue(Group.class); //cast to group
+                        retrievedGroup = keyNode.child("").getValue(Group.class); //cast to group
 
                         if (retrievedGroup != null && teamET.getText().toString().trim().
                                 equals(retrievedGroup.getGroupName())) {
@@ -348,6 +347,10 @@ public class Login extends AppCompatActivity {
                                                 // Sign in success, update UI with the signed-in user's information
                                                 Log.d("tag", "createUserWithEmail:success");
                                                 Intent intent = new Intent(context, ManageFood.class);
+                                                Bundle bundle = new Bundle();
+                                                bundle.putSerializable(Login.LOGIN_USER_KEY, user);
+                                                bundle.putSerializable(Login.LOGIN_GROUP_KEY,retrievedGroup);
+                                                intent.putExtras(bundle);
                                                 startActivity(intent);
                                                 finish();
 
@@ -408,6 +411,10 @@ break;
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("tag", "createUserWithEmail:success");
                                 Intent intent = new Intent(context, ManageFood.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable(Login.LOGIN_USER_KEY, user);
+                                bundle.putSerializable(Login.LOGIN_GROUP_KEY,newGroup);
+                                intent.putExtras(bundle);
                                 startActivity(intent);
                                 finish();                            }
                             else {

@@ -6,25 +6,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.myfood.Class.Group;
 import com.example.myfood.Class.Picture;
 import com.example.myfood.Class.User;
 import com.example.myfood.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -43,6 +40,7 @@ public class Camera extends AppCompatActivity {
     private DatabaseReference db;
     private FirebaseAuth mAuth;
     public User user;
+    public Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +50,8 @@ public class Camera extends AppCompatActivity {
 
         Intent intent = getIntent();
         if(intent != null){
-            this.user = (User) intent.getExtras().getSerializable(Login.ACTIVITY_RESULT_KEY);
+            this.user = (User) intent.getExtras().getSerializable(Login.LOGIN_USER_KEY);
+            this.group = (Group) intent.getExtras().getSerializable(Login.LOGIN_GROUP_KEY);
         }
 
 
@@ -72,7 +71,7 @@ public class Camera extends AppCompatActivity {
                    ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
                    photo.compress(Bitmap.CompressFormat.PNG, 100, byteArray);
                    String imageEncoded = Base64.encodeToString(byteArray.toByteArray(), Base64.DEFAULT);
-                   Picture picture = new Picture(imageEncoded, formattedDate, user);
+                   Picture picture = new Picture(imageEncoded, formattedDate, user, group);
                    db.push().setValue(picture);
                    Toast.makeText(getBaseContext(), "התמונה נשמרה בהצלחה", Toast.LENGTH_LONG).show();
                }
