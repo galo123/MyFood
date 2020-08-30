@@ -52,6 +52,7 @@ public class Login extends AppCompatActivity {
     public User user;
     DatabaseReference reff_user;
     DatabaseReference reff_group;
+    DatabaseReference reff_group_exists_user;
     public Group group;
     private FirebaseAuth mAuth;
 
@@ -166,39 +167,56 @@ public class Login extends AppCompatActivity {
                         }
 
                         else {
-                            mAuth.signInWithEmailAndPassword(emailET.getText().toString().trim(), passwordlET.getText().toString().trim()).
-                                    addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+
+                            reff_group_exists_user = FirebaseDatabase.getInstance().getReference("Groups");
+
+                            reff_group_exists_user.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        user = new User();
-                                        user.setEmail(emailET.getText().toString().trim());
-                                        user.setBirthDay(birthDayET.getText().toString().trim());
-                                        user.setFirstName(firstNameET.getText().toString().trim());
-                                        user.setLastName(lastNameET.getText().toString().trim());
-                                        user.setPassword(passwordlET.getText().toString().trim());
-                                        // Sign in success, update UI with the signed-in user's information
-                                        Log.d("TAG_success", "signInWithEmail:success");
-                                        Toast.makeText(context, "ברוך הבא!", Toast.LENGTH_LONG).show();
-                                        Intent intent = new Intent(context, ManageFood.class);
-                                        Bundle bundle = new Bundle();
-                                        bundle.putSerializable(Login.LOGIN_USER_KEY, user);
-                                        bundle.putSerializable(Login.LOGIN_GROUP_KEY, group);
-                                        intent.putExtras(bundle);
-                                        startActivity(intent);
-                                        finish();
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot keyNode : dataSnapshot.getChildren()) {
+                                        Group retrievedGroup = keyNode.child("").getValue(Group.class); //cast to group
 
-                                    } else {
-                                        // If sign in fails, display a message to the user.
-                                        Log.w("TAG_fail", "signInWithEmail:failure", task.getException());
-                                        Toast.makeText(context, "Authentication failed.",
-                                                Toast.LENGTH_SHORT).show();
+                                        for(User member: retrievedGroup.getFamilyMembers()){
+                                            if (member.getEmail().equals(emailET.getText().toString().trim()))
+                                            user = member;
+                                            group = retrievedGroup;
+
+                                            mAuth.signInWithEmailAndPassword(emailET.getText().toString().trim(), passwordlET.getText().toString().trim()).
+                                                    addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                                            if (task.isSuccessful()) {
+                                                                if(user != null && group != null) {
+                                                                    // Sign in success, update UI with the signed-in user's information
+                                                                    Log.d("TAG_success", "signInWithEmail:success");
+                                                                    Toast.makeText(context, "ברוך הבא!", Toast.LENGTH_LONG).show();
+                                                                    Intent intent = new Intent(context, ManageFood.class);
+                                                                    Bundle bundle = new Bundle();
+                                                                    bundle.putSerializable(Login.LOGIN_USER_KEY, user);
+                                                                    bundle.putSerializable(Login.LOGIN_GROUP_KEY, group);
+                                                                    intent.putExtras(bundle);
+                                                                    startActivity(intent);
+                                                                    finish();
+                                                                }
+
+                                                            } else {
+                                                                // If sign in fails, display a message to the user.
+                                                                Log.w("TAG_fail", "signInWithEmail:failure", task.getException());
+                                                                Toast.makeText(context, "Authentication failed.",
+                                                                        Toast.LENGTH_SHORT).show();
+                                                            }
+
+                                                        }
+                                                    });
+                                        }
                                     }
+                                }
 
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Log.w("TAG", "Failed to read value.", databaseError.toException());
                                 }
                             });
-
-
                         }
                         break;
                     case "הבא":

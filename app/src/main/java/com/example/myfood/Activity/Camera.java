@@ -37,7 +37,8 @@ public class Camera extends AppCompatActivity {
     public boolean isPicExists = false;
     private Bitmap photo;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
-    private DatabaseReference db;
+    private DatabaseReference dbGroup;
+    private DatabaseReference dbPicture;
     private FirebaseAuth mAuth;
     public User user;
     public Group group;
@@ -52,8 +53,8 @@ public class Camera extends AppCompatActivity {
             this.user = (User) intent.getExtras().getSerializable(Login.LOGIN_USER_KEY);
             this.group = (Group) intent.getExtras().getSerializable(Login.LOGIN_GROUP_KEY);
         }
-        this.db = FirebaseDatabase.getInstance().getReference("Groups").child(this.group.getGroupName());
-
+        this.dbGroup = FirebaseDatabase.getInstance().getReference("Groups").child(this.group.getGroupName());
+        this.dbPicture = FirebaseDatabase.getInstance().getReference("Picture");
 
 
         Button savePic = (Button) this.findViewById(R.id.button_save);
@@ -72,11 +73,12 @@ public class Camera extends AppCompatActivity {
                    ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
                    photo.compress(Bitmap.CompressFormat.PNG, 100, byteArray);
                    String imageEncoded = Base64.encodeToString(byteArray.toByteArray(), Base64.DEFAULT);
-                   Picture picture = new Picture(imageEncoded, formattedDate, user, group);
+                   int picHashCode = this.hashCode();
+                   Picture picture = new Picture(imageEncoded, formattedDate, user, group, picHashCode);
 
-                   group.addPicture(picture);
-                   db.setValue(group);
-                   db.push().setValue(picture);
+                   group.addPictureId(picHashCode);
+                   dbGroup.setValue(group);
+                   dbPicture.push().setValue(picture);
                    Toast.makeText(getBaseContext(), "התמונה נשמרה בהצלחה", Toast.LENGTH_LONG).show();
                }
                else{
