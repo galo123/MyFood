@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myfood.Class.Group;
 import com.example.myfood.Class.User;
@@ -149,11 +150,13 @@ public class ManageFood extends AppCompatActivity implements BottomNavigationVie
                     switch (menuItem.getItemId()) {
                         case R.id.nav_Shopping_List:
                             toolbar_text.setText("רשימת הקניות");
-                            selectedFragment = new ShoppingList();
-                            bundle = new Bundle();
-                            bundle.putSerializable(Login.LOGIN_USER_KEY, user);
-                            bundle.putSerializable(Login.LOGIN_GROUP_KEY, group);
-                            selectedFragment.setArguments(bundle);
+                            selectedFragment = null;
+//                            selectedFragment = new ShoppingList();
+//                            bundle = new Bundle();
+//                            bundle.putSerializable(Login.LOGIN_USER_KEY, user);
+//                            bundle.putSerializable(Login.LOGIN_GROUP_KEY, group);
+//                            selectedFragment.setArguments(bundle);
+                            Toast.makeText(getBaseContext(), "בקרוב...", Toast.LENGTH_SHORT).show();
                             break;
                         case R.id.nav_Scan:
                             toolbar_text.setText("סריקת קבלה");
@@ -173,9 +176,11 @@ public class ManageFood extends AppCompatActivity implements BottomNavigationVie
                             break;
 
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_bottom_container, selectedFragment).commit();
-
-                    return true;
+                    if (selectedFragment != null) {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_bottom_container, selectedFragment).commit();
+                        return true;
+                    }
+                return false;
                 }
             };
 
