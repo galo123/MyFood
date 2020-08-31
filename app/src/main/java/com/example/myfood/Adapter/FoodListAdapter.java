@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myfood.Class.FoodItem;
+import com.example.myfood.Class.Group;
+import com.example.myfood.Class.User;
 import com.example.myfood.R;
 import com.squareup.picasso.Picasso;
 
@@ -32,6 +34,8 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodLi
         public TextView foodDiscription;
         public TextView amount;
         public TextView unit;
+
+
 
         public FoodListViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);

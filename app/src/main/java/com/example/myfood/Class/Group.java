@@ -17,6 +17,7 @@ public class Group implements Serializable {
     private int score;
     private ArrayList<User> familyMembers;
     private ArrayList<Integer> picturesIds;
+    private ArrayList<Integer> availableFoodItems;
 
     public Group(String groupName) {
         this.groupName = groupName;
@@ -25,8 +26,8 @@ public class Group implements Serializable {
         this.score = 0;
         this.familyMembers = new ArrayList<User>();
         this.picturesIds = new ArrayList<Integer>();
-     //   this.familyMembers = familyMembers; // include group creator
-    }
+        this.availableFoodItems = new ArrayList<Integer>();
+        }
 
     public Group() {
 
@@ -84,6 +85,24 @@ public class Group implements Serializable {
         else{
             this.picturesIds = new ArrayList<Integer>();
             this.picturesIds.add(pictureId);
+        }
+    }
+
+    public ArrayList<Integer> getAvailableFoodItems() {
+        return availableFoodItems;
+    }
+
+    public void setAvailableFoodItems(ArrayList<Integer> availableFoodItems) {
+        this.availableFoodItems = availableFoodItems;
+    }
+
+    public void addFoodItemToAvilables(Integer foodItemId){
+        if(this.availableFoodItems != null) {
+            this.availableFoodItems.add(foodItemId);
+        }
+        else{
+            this.availableFoodItems = new ArrayList<Integer>();
+            this.availableFoodItems.add(foodItemId);
         }
     }
 

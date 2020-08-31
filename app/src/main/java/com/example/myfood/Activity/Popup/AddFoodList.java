@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.example.myfood.Activity.Login;
 import com.example.myfood.Class.FoodItem;
+import com.example.myfood.Class.Group;
+import com.example.myfood.Class.User;
 import com.example.myfood.Fragment.FoodStock;
 import com.example.myfood.R;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +37,12 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
     private String currentCategory, currentUnit;
     private ImageView foodImage;
     private Context context;
-    DatabaseReference reff;
+    DatabaseReference reff_group;
+    DatabaseReference reff_foodItem;
+
+
+    private User user;
+    private Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +51,17 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
 
-        reff = FirebaseDatabase.getInstance().getReference("FoodItems");
+     //  this.reff_group = FirebaseDatabase.getInstance().getReference("Groups").child(this.group.getGroupName());
+     //   this.reff_foodItem = FirebaseDatabase.getInstance().getReference("FoodItems");
 
         setContentView(R.layout.activity_add_food_list);
+
+        Intent intent = getIntent();
+        if(intent != null){
+            this.user = (User) intent.getExtras().getSerializable(Login.LOGIN_USER_KEY);
+            this.group = (Group) intent.getExtras().getSerializable(Login.LOGIN_GROUP_KEY);
+        }
+
         context = this;
         categorySpinner = findViewById(R.id.category_spinner);
         unitsSpiner = findViewById(R.id.units_spinner);
@@ -72,7 +87,8 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FoodItem foodItem = new FoodItem(currentCategory, addNumberPicker.getValue(), currentUnit);
+                int foodItemHashCode = this.hashCode();
+                FoodItem foodItem = new FoodItem(currentCategory, addNumberPicker.getValue(), currentUnit, user, group, foodItemHashCode);
                 FoodStock.foodList.add(foodItem);
                 finish();
                 FoodStock.mAdapter.notifyDataSetChanged();
@@ -83,8 +99,12 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
                // reff.push().setValue(newFoodItem);
 
 
-                reff.push().setValue(foodItem);
-                Toast.makeText(AddFoodList.this, "data inserted successfully!",Toast.LENGTH_LONG ).show();
+               // reff.push().setValue(foodItem);
+
+                //group.addFoodItemToAvilables(foodItem.getId());
+                //reff_group.setValue(group);
+               // reff_foodItem.push().setValue(foodItem);
+              //  Toast.makeText(AddFoodList.this, "data inserted successfully!",Toast.LENGTH_LONG ).show();
 
                 Toast.makeText(context, "המוצר נוסף בהצלחה", Toast.LENGTH_SHORT).show();
 

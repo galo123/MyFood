@@ -12,7 +12,10 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.example.myfood.Activity.Login;
 import com.example.myfood.Class.FoodItem;
+import com.example.myfood.Class.Group;
+import com.example.myfood.Class.User;
 import com.example.myfood.Fragment.FoodStock;
 import com.example.myfood.R;
 
@@ -23,7 +26,8 @@ public class EditFoodList extends Activity {
     private TextView food_nameTV, foodUnitTV;
     private NumberPicker numberPicker;
     private Button updateBtn;
-
+    private User user;
+    private Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,8 @@ public class EditFoodList extends Activity {
         }
         setContentView(R.layout.activity_edit_food_list);
         Intent intent = getIntent();
-
+            this.user = (User) intent.getExtras().getSerializable(Login.LOGIN_USER_KEY);
+            this.group = (Group) intent.getExtras().getSerializable(Login.LOGIN_GROUP_KEY);
         foodItem = (FoodItem) intent.getExtras().getSerializable("foodItem");
         numberPicker = findViewById(R.id.numberPicker);
         food_nameTV = findViewById(R.id.food_name);

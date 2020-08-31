@@ -8,20 +8,30 @@ public class FoodItem  implements Serializable {
     private int amount;
     private String unit;
     private String url;
+    private  User user;
+    private  Group group;
+    private int id;
 
 
-
-    public FoodItem(String foodDiscription, int amount, String unit, String url){
+    public FoodItem(String foodDiscription, int amount, String unit, String url, User user, Group group, int id){
         this.foodDiscription=foodDiscription;
         this.amount=amount;
         this.unit=unit;
         this.url=url;
+        this.user = user;
+        this.group = group;
+        this.id = id;
     }
-    public FoodItem(String foodDiscription, int amount,String unit){
+    public FoodItem(String foodDiscription, int amount,String unit, User user, Group group, int id){
         this.foodDiscription=foodDiscription;
         this.amount=amount;
         this.unit=unit;
+        this.user = user;
+        this.group = group;
+        this.id = id;
+
     }
+
 
     public FoodItem(){
 
@@ -45,6 +55,18 @@ public class FoodItem  implements Serializable {
         this.amount = amount;
     }
 
+
+    public User getUser(){return user;}
+
+    public void setUser(User user){this.user = user;}
+
+    public Group getGroup(){return group;}
+
+    public void setGroup(Group group){this.group = group;}
+
+    public int getId(){return this.id;}
+
+    public void setId(int id){this.id = id;}
 
     public void setFoodDiscription(String foodDiscription) {
         this.foodDiscription = foodDiscription;

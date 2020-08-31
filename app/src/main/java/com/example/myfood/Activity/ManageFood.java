@@ -31,10 +31,9 @@ import com.google.android.material.navigation.NavigationView;
 
 public class ManageFood extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    private User user;
+    private User user; //delete?
     private Group group;
-
-
+    private Bundle bundle;// = new Bundle();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +51,12 @@ public class ManageFood extends AppCompatActivity implements BottomNavigationVie
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         bottomNav.setSelectedItemId(R.id.nav_Food_stock);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_bottom_container, new FoodStock()).commit();
+        Fragment newFragment = new FoodStock();
+        bundle = new Bundle();
+        bundle.putSerializable(Login.LOGIN_USER_KEY, user);
+        bundle.putSerializable(Login.LOGIN_GROUP_KEY, group);
+        newFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_bottom_container, newFragment).commit();
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -146,11 +150,15 @@ public class ManageFood extends AppCompatActivity implements BottomNavigationVie
                         case R.id.nav_Shopping_List:
                             toolbar_text.setText("רשימת הקניות");
                             selectedFragment = new ShoppingList();
+                            bundle = new Bundle();
+                            bundle.putSerializable(Login.LOGIN_USER_KEY, user);
+                            bundle.putSerializable(Login.LOGIN_GROUP_KEY, group);
+                            selectedFragment.setArguments(bundle);
                             break;
                         case R.id.nav_Scan:
                             toolbar_text.setText("סריקת קבלה");
                             selectedFragment = new Scan();
-                            Bundle bundle = new Bundle();
+                            bundle = new Bundle();
                             bundle.putSerializable(Login.LOGIN_USER_KEY, user);
                             bundle.putSerializable(Login.LOGIN_GROUP_KEY, group);
                             selectedFragment.setArguments(bundle);
@@ -158,6 +166,10 @@ public class ManageFood extends AppCompatActivity implements BottomNavigationVie
                         case R.id.nav_Food_stock:
                             toolbar_text.setText("מלאי המזון");
                             selectedFragment = new FoodStock();
+                            bundle = new Bundle();
+                            bundle.putSerializable(Login.LOGIN_USER_KEY, user);
+                            bundle.putSerializable(Login.LOGIN_GROUP_KEY, group);
+                            selectedFragment.setArguments(bundle);
                             break;
 
                     }
