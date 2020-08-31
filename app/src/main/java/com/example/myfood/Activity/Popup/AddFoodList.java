@@ -43,6 +43,11 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
     private DatabaseReference reff_foodItem;
     public User user = new User();
     public Group group=new Group();
+    private String itemUrl;
+    private final String cheeseUrlPic = "https://hameshek.co.il/wp-content/uploads/2019/07/7290002824183-600x600.jpg";
+    private final String milkUrlPic = "https://www.offisal.co.il/wp-content/uploads/2017/11/5a13cb221b43705b84a7d136029d184701f13a1c.jpg";
+    private final String sugarUrlPic = "https://images.theconversation.com/files/307440/original/file-20191217-58292-nlmvmh.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip";
+    private final String spaghettiUrlPic = "https://previews.123rf.com/images/pavlok/pavlok1804/pavlok180400192/100084317-stack-of-raw-spaghetti-isolated-on-white-background.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,19 +93,19 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
             public void onClick(View v) {
 
                 int foodItemHashCode = this.hashCode();
-                FoodItem foodItem = new FoodItem(currentCategory, addNumberPicker.getValue(), currentUnit, user, group, foodItemHashCode);
+                FoodItem foodItem = new FoodItem(currentCategory, addNumberPicker.getValue(), currentUnit, itemUrl, user, group, foodItemHashCode);
                 FoodStock.foodList.add(foodItem);
                 finish();
                 FoodStock.mAdapter.notifyDataSetChanged();
 
                 //insert data to firebase- not working
 
-               // reff_group = FirebaseDatabase.getInstance().getReference("Groups").child(foodItem.getGroup().getGroupName());
-               // reff_foodItem = FirebaseDatabase.getInstance().getReference("FoodItems");
+                reff_group = FirebaseDatabase.getInstance().getReference("Groups").child(group.getGroupName());
+                reff_foodItem = FirebaseDatabase.getInstance().getReference("FoodItems");
 
-               // reff_foodItem.push().setValue(foodItem);
-               // group.addFoodItemToAvilables(foodItem.getId());
-               // reff_group.setValue(group);
+                reff_foodItem.push().setValue(foodItem);
+                group.addFoodItemToAvailableItems(foodItem.getId());
+                reff_group.setValue(group);
 
                 Toast.makeText(context, "המוצר נוסף בהצלחה", Toast.LENGTH_SHORT).show();
 
@@ -137,31 +142,35 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
                     switch (parent.getItemAtPosition(position).toString()) {
                         case "גבינה לבנה":
                             Picasso.get()
-                                    .load("https://hameshek.co.il/wp-content/uploads/2019/07/7290002824183-600x600.jpg")
+                                    .load(cheeseUrlPic)
                                     .fit()
                                     .centerCrop()
                                     .into(foodImage);
+                            itemUrl = cheeseUrlPic;
                             break;
                         case "חלב":
                             Picasso.get()
-                                    .load("https://www.offisal.co.il/wp-content/uploads/2017/11/5a13cb221b43705b84a7d136029d184701f13a1c.jpg")
+                                    .load(milkUrlPic)
                                     .fit()
                                     .centerCrop()
                                     .into(foodImage);
+                            itemUrl = milkUrlPic;
                             break;
                         case "סוכר":
                             Picasso.get()
-                                    .load("https://images.theconversation.com/files/307440/original/file-20191217-58292-nlmvmh.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip")
+                                    .load(sugarUrlPic)
                                     .fit()
                                     .centerCrop()
                                     .into(foodImage);
+                            itemUrl = sugarUrlPic;
                             break;
                         case "ספגטי":
                             Picasso.get()
-                                    .load("https://previews.123rf.com/images/pavlok/pavlok1804/pavlok180400192/100084317-stack-of-raw-spaghetti-isolated-on-white-background.jpg")
+                                    .load(spaghettiUrlPic)
                                     .fit()
                                     .centerCrop()
                                     .into(foodImage);
+                            itemUrl = spaghettiUrlPic;
                             break;
                     }
 

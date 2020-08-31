@@ -177,10 +177,10 @@ public class Login extends AppCompatActivity {
                                         Group retrievedGroup = keyNode.child("").getValue(Group.class); //cast to group
 
                                         for(User member: retrievedGroup.getFamilyMembers()){
-                                            if (member.getEmail().equals(emailET.getText().toString().trim()))
-                                            user = member;
-                                            group = retrievedGroup;
-
+                                            if (member.getEmail().equals(emailET.getText().toString().trim())) {
+                                                user = member;
+                                                group = retrievedGroup;
+                                            }
                                             mAuth.signInWithEmailAndPassword(emailET.getText().toString().trim(), passwordlET.getText().toString().trim()).
                                                     addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
                                                         @Override

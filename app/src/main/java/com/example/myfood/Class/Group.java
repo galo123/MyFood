@@ -100,10 +100,14 @@ public class Group implements Serializable {
         this.availableFoodItems = availableFoodItems;
     }
 
-    public void addFoodItemToAvilables(Integer foodItemId){
-        availableFoodItems.add(foodItemId);
-
-
+    public void addFoodItemToAvailableItems(Integer foodItemId){
+        if(this.availableFoodItems != null) {
+            this.availableFoodItems.add(foodItemId);
+        }
+        else{
+            this.availableFoodItems = new ArrayList<Integer>();
+            this.availableFoodItems.add(foodItemId);
+        }
     }
 
 }
