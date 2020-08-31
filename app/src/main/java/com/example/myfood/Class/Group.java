@@ -1,5 +1,8 @@
 package com.example.myfood.Class;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,6 +21,7 @@ public class Group implements Serializable {
     private ArrayList<User> familyMembers;
     private ArrayList<Integer> picturesIds;
     private ArrayList<Integer> availableFoodItems;
+
 
     public Group(String groupName) {
         this.groupName = groupName;
@@ -97,13 +101,9 @@ public class Group implements Serializable {
     }
 
     public void addFoodItemToAvilables(Integer foodItemId){
-        if(this.availableFoodItems != null) {
-            this.availableFoodItems.add(foodItemId);
-        }
-        else{
-            this.availableFoodItems = new ArrayList<Integer>();
-            this.availableFoodItems.add(foodItemId);
-        }
+        availableFoodItems.add(foodItemId);
+
+
     }
 
 }

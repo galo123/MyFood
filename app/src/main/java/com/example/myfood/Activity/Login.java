@@ -189,7 +189,7 @@ public class Login extends AppCompatActivity {
                                                                 if(user != null && group != null) {
                                                                     // Sign in success, update UI with the signed-in user's information
                                                                     Log.d("TAG_success", "signInWithEmail:success");
-                                                                    Toast.makeText(context, "ברוך הבא!", Toast.LENGTH_LONG).show();
+                                                                   // Toast.makeText(context, "ברוך הבא!", Toast.LENGTH_LONG).show();
                                                                     Intent intent = new Intent(context, ManageFood.class);
                                                                     Bundle bundle = new Bundle();
                                                                     bundle.putSerializable(Login.LOGIN_USER_KEY, user);

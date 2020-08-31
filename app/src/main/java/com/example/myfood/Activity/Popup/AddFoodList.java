@@ -28,6 +28,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 public class AddFoodList extends Activity implements AdapterView.OnItemSelectedListener {
     private int width;
     private int heigh;
@@ -37,12 +39,10 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
     private String currentCategory, currentUnit;
     private ImageView foodImage;
     private Context context;
-    DatabaseReference reff_group;
-    DatabaseReference reff_foodItem;
-
-
-    private User user;
-    private Group group;
+    private DatabaseReference reff_group;
+    private DatabaseReference reff_foodItem;
+    public User user = new User();
+    public Group group=new Group();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +51,6 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
 
-     //  this.reff_group = FirebaseDatabase.getInstance().getReference("Groups").child(this.group.getGroupName());
-     //   this.reff_foodItem = FirebaseDatabase.getInstance().getReference("FoodItems");
 
         setContentView(R.layout.activity_add_food_list);
 
@@ -61,6 +59,7 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
             this.user = (User) intent.getExtras().getSerializable(Login.LOGIN_USER_KEY);
             this.group = (Group) intent.getExtras().getSerializable(Login.LOGIN_GROUP_KEY);
         }
+
 
         context = this;
         categorySpinner = findViewById(R.id.category_spinner);
@@ -87,24 +86,21 @@ public class AddFoodList extends Activity implements AdapterView.OnItemSelectedL
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 int foodItemHashCode = this.hashCode();
                 FoodItem foodItem = new FoodItem(currentCategory, addNumberPicker.getValue(), currentUnit, user, group, foodItemHashCode);
                 FoodStock.foodList.add(foodItem);
                 finish();
                 FoodStock.mAdapter.notifyDataSetChanged();
 
+                //insert data to firebase- not working
 
-                //firebase data insertion
-               // newFoodItem = new FoodItem(  foodItemName.getText().toString().trim(), Integer.parseInt(addAmount.getText().toString().trim()),  add_numberPicker.getText().toString().trim() );
-               // reff.push().setValue(newFoodItem);
+               // reff_group = FirebaseDatabase.getInstance().getReference("Groups").child(foodItem.getGroup().getGroupName());
+               // reff_foodItem = FirebaseDatabase.getInstance().getReference("FoodItems");
 
-
-               // reff.push().setValue(foodItem);
-
-                //group.addFoodItemToAvilables(foodItem.getId());
-                //reff_group.setValue(group);
                // reff_foodItem.push().setValue(foodItem);
-              //  Toast.makeText(AddFoodList.this, "data inserted successfully!",Toast.LENGTH_LONG ).show();
+               // group.addFoodItemToAvilables(foodItem.getId());
+               // reff_group.setValue(group);
 
                 Toast.makeText(context, "המוצר נוסף בהצלחה", Toast.LENGTH_SHORT).show();
 
